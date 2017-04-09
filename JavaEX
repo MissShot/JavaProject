@@ -1,0 +1,319 @@
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+public class exam_dev {
+	private static String[] Log_list;
+	 static String[] Name,DateIn,DateOut;
+	static String[] TimeIn,TimeOut;
+	static int count=2;
+	static String Day;
+	static String [] TimeIn_String,TimeOut_String=new String[2];
+	static int [] TimeIn_int=new int[2];
+	static int [] TimeOut_int=new int[2];
+	static int OT=0;
+	static double mounyTotal=0,mouny;
+	static int Stats=0;
+	static int TotleMin=0,barkeTime=0;
+	
+	
+	
+	public static void main(String[]args){
+		
+		ReadLine();
+		
+	}
+	
+	public static void ReadLine(){
+		 int i=0;
+		int j=0;
+		String[]a;
+		try{
+			
+			ArrayList<String> list=new ArrayList<String>(Files.readAllLines(Paths.get("C:\\Users\\Tokud\\Desktop\\Dev_Test_2016\\1.working_time.log"))); //อ่านไฟล์
+			
+			 Log_list = new String[list.size()];
+			 
+			for( i=0;i<Log_list.length;i++){         //size()ขีดจำกัดของข้อมูลที่อยู่ในlist
+				
+				Log_list[i]=list.get(i);
+				
+				//System.out.println(Log_list[i]); //อ่านค่าจากlogทีละบรรทัด
+				
+			
+					  a = Log_list[i].split("\\|");
+					  
+					  
+			   if(a[2].matches("")){ //ดักค่าที่เป็นindexว่าง เพื่อไม่ให้เกิดการคำนวณผิดพลาด
+					 
+				  // System.out.println("It Null Index");
+				   count++;
+				   
+				}else{ //ถ้าindexที่สองไม่ว่างให้ยัดค่าใส่ตัวแปร (คนที่มาทำงานในวันนั้น)
+					
+					count++;  //เป้นตัวนับรอบ
+					
+					Name= new String[count];     //กำหนด ขนาดของตัวแปรให้มีความกว้างเท่ากันข้อมูลที่ถูกเช็คเงื่อนไขมา
+					DateIn= new String[count];
+					TimeIn= new String[count];
+					DateOut= new String[count];
+					TimeOut= new String[count];
+					
+					       Name[i] = a[0];    // ใส่ค่าของแต่ละ log ไปเก็บไว้ในตัวแปรอีกตัวเพื่อใช้ในการคำนวณต่อไป
+						 DateIn[i] = a[1];
+						 TimeIn[i] = a[2];
+						 DateOut[i] = a[3];
+						 TimeOut[i] = a[4];
+						 
+						 
+						// System.out.println(Name[i]);      // ทดสอบค่าที่ปริ้นออกมา
+						// System.out.println(DateIn[i]);
+						// System.out.println(TimeIn[i]);
+						// System.out.println(DateOut[i]);
+						// System.out.println(TimeOut[i]);
+						 
+						 System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+						 
+						///////////////////////////////////////////Time IN////////////////////////////////////////////////////////////////////////////////
+						//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+						 
+						 TimeIn_String = TimeIn[i].split("\\:"); //แยกเวลาเข้างาน
+						 
+						 
+					 TimeIn_int[0]=Integer.parseInt(TimeIn_String[0]);  //////////// แปลงสติงเป็น Int TimeIn
+					 TimeIn_int[1]=Integer.parseInt(TimeIn_String[1]);  ///////////
+						
+					 
+					 
+					 ////////////////////////////////////////////////////////////////เช็คมาสาย กับ เข้างานก่อนเวลา///////////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					 if((TimeIn_int[0]==7&&TimeIn_int[1]>30)){   //  เข้าก่อนเวล ปัด เป็น 8.00
+						 
+						 TimeIn_int[0]=8;
+						 TimeIn_int[1]=0;
+						 
+					 }else if((TimeIn_int[0]==8&&TimeIn_int[1]<=5)){ //กรณีมาหลัง 8.00 แต่ไม่ถึง 8.06 ให้ปัดเป็น 8.00
+						 TimeIn_int[0]=8;
+						 TimeIn_int[1]=0;
+						 
+					 }
+					 else if(((TimeIn_int[0]>=8&&TimeIn_int[0]<11)&&TimeIn_int[1]>=6)){ // เช็คเงื่อนไขมาสาย หักเงิน มาสายเกิน 8.06
+						
+						 
+					 }else if((TimeIn_int[0]>10&&TimeIn_int[1]>=0)){ //กรณีเข้า งานกะ บ่าย ดึก
+						 
+						Stats=1;
+						
+					 }
+					 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					
+					     
+					 System.out.println("คุณ     "+Name[i] );
+					 System.out.println("ทำงานในวัน  "+ DateIn[i]);
+					  System.out.println("เข้าทำงาน    "+TimeIn_int[0]+":"+TimeIn_int[1]+" นาที");          
+						 
+						 
+						 TimeIn_int[0]=((TimeIn_int[0]*60)+TimeIn_int[1]);
+						    
+						
+						//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+						 
+						
+			///////////			///////////////////////////////////////////////////////////Time Out///////////////////////////////////////////////////////////////// 
+			//////////			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+						 TimeOut_String = TimeOut[i].split("\\:"); //แยกเวลาออกงาน
+						 
+			
+						 
+						 TimeOut_int[0]=Integer.parseInt(TimeOut_String[0]); //////////// แปลงสติงเป็น Int TimeOut
+						 TimeOut_int[1]=Integer.parseInt(TimeOut_String[1]); ///////////
+						 
+						 
+						 
+						 ///////////////////////////////////////////เวลาออกช้า OT ////////////////////////////////////////////////////////////////////
+						 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+							
+	                      if((TimeOut_int[0]==17&&TimeOut_int[1]<30)){   // ออกหลังเวลาปรับเป็น 17.00
+							 
+							 TimeOut_int[0]=17;
+							 TimeOut_int[1]=0;
+							
+						 }else if((TimeOut_int[0]>=17&&TimeOut_int[1]>=0)){ //  OT
+							 	
+						
+							 
+						 }
+					////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+						
+						
+	                      
+	                      
+	                      
+	                      
+	                      System.out.println("ออกงานเวลา      "+TimeOut_int[0]+":"+TimeOut_int[1]+" นาที");
+			
+						 
+						 if((TimeIn_int[0]>=7&&TimeIn_int[1]>=0)&&(TimeOut_int[0]<13&&TimeOut_int[1]>=0)){  //เช็คคนทำงานไม่เต้มวัน
+							      barkeTime=0;
+	                       
+	                       		
+	                       }else{  //หักเวลาพัก 60 min  สำหรับคนทำเต้มวัน
+	                    	      barkeTime=-60;
+	                    	 
+	                        	
+	                        }
+						
+						
+						 
+						 TimeOut_int[0]=((TimeOut_int[0]*60)+TimeOut_int[1]);
+						
+						 
+						
+						 
+						
+						 
+					/////////////////////////////////////////////////////////คำนวณปกติ//////////////////////////////////////////////////////////////	 
+						 TotleMin=(TimeOut_int[0]-TimeIn_int[0]);
+						 
+						 if(TotleMin<0){  //กรณีที่ ค่าtimeออกมาติดลบเพราะเข้างานช่วงอื่นที่ไม่ใช่ 8.00
+							 TotleMin=TotleMin*(-1);
+						 }
+						 TotleMin=TotleMin+barkeTime;
+                        
+                       
+						 
+						 System.out.println("เวลาในการทำงานรวม (นาที)  "+TotleMin+"  นาที ");
+						 
+						 
+						
+						
+						 
+						
+						
+						 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+						 
+						 if(DateIn[i].matches("8/10/2015")){
+							 Day="Thursday";
+							
+							 switch (Stats) {
+								case 1: 
+									   OT=TotleMin;
+									   mounyTotal=OT*(0.90625); // กรณี เข้ามาเพื่อทำ OT   1.5 เท่า OT
+									  
+									break;
+
+								default:
+									 if(TotleMin>=480){ //ถ้าทำOT
+										 
+										 OT=TotleMin-480;
+										 mouny=TotleMin*(0.604166666666);
+										 mounyTotal=OT*(0.90625);
+										 mounyTotal=mounyTotal+mouny;
+									 
+									 }else{
+										 
+										 mouny=TotleMin*(0.604166666666);
+										 mounyTotal=OT*(0.90625);
+										 mounyTotal=mounyTotal+mouny;
+										 
+									 }
+									
+									
+									break;
+								};
+							 
+							
+							
+							 
+						 }else if (DateIn[i].matches("9/10/2015")){
+							 Day="Friday";
+							 switch (Stats) {
+								case 1: 
+									   OT=TotleMin;
+									   mounyTotal=OT*(0.90625); // กรณี เข้ามาเพื่อทำ OT   1.5 เท่า OT
+									  
+									break;
+
+								default:
+									 if(TotleMin>=480){ //ถ้าทำOT
+										 
+										 OT=TotleMin-480;
+										 mouny=TotleMin*(0.604166666666);
+										 mounyTotal=OT*(0.90625);
+										 mounyTotal=mounyTotal+mouny;
+									 }else{
+										 
+										 mouny=TotleMin*(0.604166666666);
+										 mounyTotal=OT*(0.90625);
+										 mounyTotal=mounyTotal+mouny;
+										 
+									 }
+									
+									
+									break;
+								};
+							 
+						 }else if(DateIn[i].matches("10/10/2015")){
+							 Day="Saturday";
+							 switch (Stats) {
+								case 1: 
+									   OT=TotleMin;
+									   mounyTotal=OT*(1.20833333333); // กรณี เข้ามาเพื่อทำ OT ในวันหยุด  2 เท่า OT
+									  
+									break;
+
+								default:
+									 if(TotleMin>=480){ //ถ้าทำOT
+										 
+										 OT=TotleMin-480;
+										 mouny=TotleMin*(0.90625);
+										 mounyTotal=OT*(1.20833333333);
+										 mounyTotal=mounyTotal+mouny;
+										
+									 }else{
+										 mouny=TotleMin*(0.90625);
+										 mounyTotal=OT*(1.20833333333);
+										 mounyTotal=mounyTotal+mouny;
+									 }
+									
+									
+									break;
+								};
+							 
+						 }
+						
+						 System.out.println("ทำOTทั้งหมด   "+OT+" นาที");
+						 System.out.println("จำนวนเรายได้ทั้งหมด คือ  "+mounyTotal+" บาท");
+						 
+						 
+						// System.out.println(Day);
+						 Stats=0;   //เพื่อรีเซ็ทค่า ไม่งั้นจะ BUG
+						 mounyTotal=0;
+						 barkeTime=0;
+						 mouny=0;
+						 OT=0;
+						
+				}
+					 
+					 
+				
+					 
+				
+				}
+			
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+
+}
