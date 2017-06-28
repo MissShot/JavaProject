@@ -1,0 +1,31 @@
+Select LEFT(ENGSURNAME,3) 
+from   LodeData 
+Group by  LEFT(ENGSURNAME,3) 
+ 
+
+
+
+select LEFT(ENGSURNAME,4) as NewENGSURNAME , count(*) from   LodeData 
+Group by  LEFT(ENGSURNAME,4) 
+Having count(*) > 1
+
+///////////////////////////////////////////////////////
+intersect
+
+select EMPLOYEEID,ENGNAME,ENGSURNAME,(SUBSTRING(ENGSURNAME, 1, 3)) as 'PrefixLastname'
+from ComputeData
+where ENGSURNAME like 'L%'
+
+///////////////////////////////////////////////
+select (SUBSTRING(ENGSURNAME, 1, 3)) as 'PrefixLastname'
+from ComputeData
+group by SUBSTRING(ENGSURNAME, 1, 3)
+Having SUBSTRING(ENGSURNAME, 1, 3) like'%Lee'
+;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Qurry CutString
+------------------------------------------------------------------
+select (ENGNAME+'.'+SUBSTRING(ENGSURNAME, 1, 3))as "UID",(SUBSTRING(ENGSURNAME, 1, 3)) as "Cut_SubnameToString",BRANCH,EMPLOYEEID,PREFIX,FNAME,SURNAME,NICKNAME,EPREFIX,ENGNAME,ENGSURNAME,(ENGNAME+'   '+ENGSURNAME) as "EngFullname",EMP_TYPE,BOSSID,EMP_POSITION,BU1,BU2,BU3,JOB,STARTDATE,FIRSTHIREDATE,PROBATION,OLD_EMPLOYEEID,EDIT_DATE,EDIT_TIME,CREATE_DATE,CREATE_TIME,RESIGNDATE,STATUS,EDIT_DATETIME,COSTCENTER,JOBDATAEFFECTIVEDATE,TELNO,(ENGNAME+'.'+SUBSTRING(ENGSURNAME, 1, 3)+'@Kiatnakin.co.th')as "Email"
+from LodeData
+;
