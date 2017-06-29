@@ -37,6 +37,7 @@ namespace ST_51f9dbba1aeb402cb9163eb4cdd7d02c
         int node_index;
         int n_digit;
         int DigiIndex = 0;
+        int count = 0;
         String strConnString;
         SqlConnection objConn;
         Boolean NameDuplicate = false;
@@ -210,15 +211,13 @@ namespace ST_51f9dbba1aeb402cb9163eb4cdd7d02c
                             } //end else(if DifiIndex)
 
 
-                         //   Console.WriteLine("node_index = " + node_index);
-                        //    Console.WriteLine("Pass To (if)");
-                            // n_digit = DigiIndex;
-                        //    Console.WriteLine("Pass To (cover valible)");
-                            UID_suffix.Add(DataLastName[node_index].ToString().Substring(0, n_digit));
-                         //   Console.WriteLine("Pass To (UID)");
-                            DataLastName.RemoveAt(node_index);
-                      //  MessageBox.Show("Litst DataLastName  " + i + "  " + DataLastName[i]);
+                       
+                     
+                        UID_suffix.Add(DataLastName[node_index].ToString().Substring(0, n_digit));
                         MessageBox.Show("Data In UID list " + i + "  =  " + UID_suffix[i].ToString());
+                        DataLastName.RemoveAt(node_index);
+                      
+                        
                            
 
 
@@ -229,9 +228,15 @@ namespace ST_51f9dbba1aeb402cb9163eb4cdd7d02c
                     DigiIndex++;
                 } //End while check count
 
-        //    }//// End if(NameDuplicate)
-        
+            //    }//// End if(NameDuplicate)
+            listENGNAME[0] = "do";
+            UID_suffix[0] =  "lu";
+            listEMPID[0] = "110247";
 
+           /* for (int i=0;i<n ;i++) {//วน update ตาม size list data
+                UpdateCommend(listENGNAME[0], UID_suffix[i], listEMPID[i]);
+            }//end for 
+          */
             Dts.TaskResult = (int)ScriptResults.Success;
 		}
 
@@ -253,18 +258,19 @@ namespace ST_51f9dbba1aeb402cb9163eb4cdd7d02c
 
 
         //star update
-        void UpdateCommend( List<String> listENGNAME, List<String> UID_suffix, List<String> listEMPID) {
+       void  UpdateCommend(String listENGNAME, String UID_suffix, String listEMPID) {
 
             strConnString = @"Data Source =TOKUDOLU\SQLEXPRESS; Initial Catalog =ThisDB; User ID = sa; Password = 0840449287";
             objConn = new SqlConnection(strConnString);
-            String QurryUpdate = "update ComputeData set UID = '" + listENGNAME[x] + "." + UID_suffix[x] + "', Subname = '" + UID_suffix[x] + "' where EMPLOYEEID = '" + listEMPID[x] + "';";
+
+            String QurryUpdate = "update ComputeData set UID = '"+listENGNAME+"."+UID_suffix+"', Subname = '"+UID_suffix + "' where EMPLOYEEID = '" + listEMPID + "';";
             SqlCommand UpdateCommand = new SqlCommand(QurryUpdate, objConn);
 
             try
             {
                 objConn.Open();
                 UpdateCommand.ExecuteNonQuery();
-                MessageBox.Show("Successful");
+                MessageBox.Show("Update Success");
                 objConn.Close();
 
             }
