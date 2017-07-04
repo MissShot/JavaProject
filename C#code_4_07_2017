@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 
 #endregion
@@ -38,7 +39,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
         List<String> listDataLastName = new List<String>();
         List<String> NewlistDataLastName = new List<String>();
         List<String> ThislistDataLastName=new List<String>();
-        int i, n, x, y = 0;
+        int i, n, x, y,z = 0;
         int node_index;
         int n_digit;
         int DigiIndex = 0;
@@ -180,9 +181,12 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
                 ThislistDataLastName.Add(DataLastName[i].Substring(0, 3));
             }
 
+           
+            
             //check name Duplicate---------------------------------------------------------------
 
-            try{
+            try
+            {
                 for (x = 0; x < n; x++)
                 {
                     for (y = 0; y < n; y++)
@@ -199,26 +203,49 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
                             /// check DataLastName Duplicate (lastname)
                             NameDuplicate = false;//-------for check data befor update commend
                             digi = 3; // set digi =3 
+                            z = 0;
                               do
                             { // check digi(values) DataLastName[x] & DataLastName[y]
                                 if (x != y && (ThislistDataLastName[x]).Equals(ThislistDataLastName[y])) //check digi dulicate----- (1)
                                 {
 
                                    
-                                    digi++;
+                                    digi++; //digi + 
+                                    int CountLetterX = DataLastName[x].Count(Char.IsLetter);
+                                    int CountLetterY = DataLastName[y].Count(Char.IsLetter);
 
-                                    if (x != y && (DataLastName[x].Substring(0, digi)).Equals(DataLastName[y].Substring(0, digi)))
-                                    {
-                                        
-                                    }
-                                    else {
-                                        NameDuplicate = true;
-                                        NewlistDataLastName.Add(DataLastName[x].Substring(0, digi));
-                                      //  NewlistDataLastName.Add(DataLastName[y].Substring(0, digi));
+                                    if ((digi<=CountLetterX)&&(digi<=CountLetterY)) {
+                                        if (x != y && (DataLastName[x].Substring(0, digi)).Equals(DataLastName[y].Substring(0, digi))) //check if x(digi)=y(digi)
+                                        {
 
-                                    }
+                                        }
+                                        else
+                                        {//check if x(digi)!=y(digi)
+                                         //it mene don't have duplicate in lastname(CutDIGI)
+                                            NameDuplicate = true; //set true
+                                            NewlistDataLastName.Add(DataLastName[x].Substring(0, digi));
+                                            //  NewlistDataLastName.Add(DataLastName[y].Substring(0, digi));
 
-                                }
+                                        }//end if x&y substring
+                                    } else if ((digi> CountLetterX)||(digi> CountLetterY)) {
+
+                                        if ((CountLetterX<digi)&&(CountLetterY>digi)) {
+
+                                            UpdateCommend(listENGNAME[x], DataLastName[x].Substring(0, digi-1), listEMPID[x]);
+                                            UpdateCommend(listENGNAME[y], DataLastName[y].Substring(0, digi), listEMPID[y]);
+                                            break;
+
+                                        }
+                                        else {
+                                            UpdateCommend(listENGNAME[y], DataLastName[y].Substring(0, digi - 1), listEMPID[y]);
+                                            UpdateCommend(listENGNAME[x], DataLastName[x].Substring(0, digi), listEMPID[x]);
+                                            break;
+                                        }//end else
+
+                                    }//end else if
+
+
+                                } //end if check duplicate (1)
                             } while (x != y && (DataLastName[x].Substring(0, digi)).Equals(DataLastName[y].Substring(0, digi)));
 
                             if (NameDuplicate == true) {
