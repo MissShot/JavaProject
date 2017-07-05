@@ -12,7 +12,7 @@ using System;
 using System.Data;
 using Microsoft.SqlServer.Dts.Runtime;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using System.Data.SqlClient;//connect to database
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -39,7 +39,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
         List<String> listDataLastName = new List<String>();
         List<String> NewlistDataLastName = new List<String>();
         List<String> ThislistDataLastName=new List<String>();
-        int i, n, x, y,z = 0;
+        int i, n, x, y = 0;
         int node_index;
         int n_digit;
         int DigiIndex = 0;
@@ -120,7 +120,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
             strConnString = @"Data Source =TOKUDOLU\SQLEXPRESS; Initial Catalog =ThisDB; User ID = sa; Password = 0840449287";
             objConn = new SqlConnection(strConnString);
 
-
+            
 
 
             //edit
@@ -138,7 +138,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
 
             }
             /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
-            string ThisquerySql = "select * from ComputeData;"; //query        
+            string ThisquerySql = "select * from CompleteData;"; //query        
 
 
 
@@ -183,7 +183,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
 
            
             
-            //check name Duplicate---------------------------------------------------------------
+            //check  Duplicate---------------------------------------------------------------
 
             try
             {
@@ -203,7 +203,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
                             /// check DataLastName Duplicate (lastname)
                             NameDuplicate = false;//-------for check data befor update commend
                             digi = 3; // set digi =3 
-                            z = 0;
+                          
                               do
                             { // check digi(values) DataLastName[x] & DataLastName[y]
                                 if (x != y && (ThislistDataLastName[x]).Equals(ThislistDataLastName[y])) //check digi dulicate----- (1)
@@ -237,7 +237,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
 
                                         }
                                         else {
-                                            UpdateCommend(listENGNAME[y], DataLastName[y].Substring(0, digi - 1), listEMPID[y]);
+                                            UpdateCommend(listENGNAME[y], DataLastName[y].Substring(0, digi-1), listEMPID[y]);
                                             UpdateCommend(listENGNAME[x], DataLastName[x].Substring(0, digi), listEMPID[x]);
                                             break;
                                         }//end else
@@ -275,7 +275,7 @@ namespace ST_2f63d27c3d28476cb1132e30d5f4f688
             strConnString = @"Data Source =TOKUDOLU\SQLEXPRESS; Initial Catalog =ThisDB; User ID = sa; Password = 0840449287";
             objConn = new SqlConnection(strConnString);
 
-            String QurryUpdate = "update ComputeData set UID = '" + listENGNAME + "." + UID_suffix + "', Subname = '" + UID_suffix + "',Email ='" + listENGNAME + "." + UID_suffix + "@Kiatnakin.co.th" + "'  where EMPLOYEEID = '" + listEMPID + "';";
+            String QurryUpdate = "update CompleteData set UID = '" + listENGNAME + "." + UID_suffix + "', Subname = '" + UID_suffix + "',Email ='" + listENGNAME + "." + UID_suffix + "@Kiatnakin.co.th" + "'  where EMPLOYEEID = '" + listEMPID + "';";
             SqlCommand UpdateCommand = new SqlCommand(QurryUpdate, objConn);
 
             try
